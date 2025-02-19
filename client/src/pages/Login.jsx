@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Visibility } from '@mui/icons-material';
 
 const Login = () => {
@@ -11,6 +11,8 @@ const Login = () => {
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [formComplete, setFormComplete] = useState(false);
 	const [loginError, setLoginError] = useState(null);
+
+	const navigate = useNavigate();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -48,7 +50,7 @@ const Login = () => {
 				});
 		
 				// // Redirects to home
-				// navigate('/');
+				navigate('/');
 
 			} catch (error) {
 				console.error('Login error: ', error.response?.data);
