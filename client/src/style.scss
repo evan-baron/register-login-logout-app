@@ -2,11 +2,51 @@ $masterBackground: #b9e7e7;
 $masterButton: teal;
 $darkGray: #444444;
 
-.app {
+* {
 	box-sizing: border-box;
-	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+html, body, #root {
+	height: 100dvh;
+}
+
+.app {
+	font-family: Calibri;
+	display: flex;
+	justify-content: center;
+	height: 100%;
 
 	.container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+
+		//NAVBAR
+		.navbar{
+			display: flex;
+			justify-content: center;
+			font-size: 1.25rem;
+			color: $darkGray;
+
+			.nav-container{
+				display: flex;
+				justify-content: space-between;
+				padding: 1rem;
+				width: 80%;
+				max-width: 64em;
+
+				.logo{
+
+				}
+
+				.links{
+					display: flex;
+					gap: 1rem;
+				}
+			}
+		}
+
 		//LOGIN & REGISTER
 		.auth {
 			display: flex;
@@ -14,7 +54,7 @@ $darkGray: #444444;
 			align-items: center;
 			justify-content: center;
 			background-color: $masterBackground;
-			height: 100dvh;
+			height: 100%;
 
 			h1 {
 				font-size: 2rem;
