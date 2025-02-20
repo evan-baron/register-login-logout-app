@@ -1,19 +1,27 @@
 // services/userService.js
 const bcrypt = require('bcrypt');
-const UserModel = require('../models/userModel'); // Import the User model
+const userModel = require('../models/userModel'); // Import the User model
 
 // Create a new user
 const createUser = async (first_name, last_name, email, password) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const result = await UserModel.createUser(first_name, last_name, email, hashedPassword);
+  const result = await userModel.createUser(first_name, last_name, email, hashedPassword);
 
-  return { id: result.insertId, first_name, last_name, email };
+  const newUser = await userModel.findUserById(result.insertId);
+
+  return {
+		id: newUser.id,
+		first_name: newUser.first_name,
+		last_name: newUser.last_name,
+		email: newUser.email,
+		created_at: newUser.created_at,
+	};
 };
 
 // Authenticate a user
 const authenticateUser = async (email, password) => {
-  const user = await UserModel.findUserByEmail(email);
+  const user = await userModel.findUserByEmail(email);
 
   if (!user) {
     return { success: false, message: 'Incorrect email or password.' };
@@ -30,22 +38,22 @@ const authenticateUser = async (email, password) => {
 
 // Get a user by email
 const getUserByEmail = async (email) => {
-  return await UserModel.findUserByEmail(email);
+  return await userModel.findUserByEmail(email);
 };
 
 // Check if a user exists by email
 const checkIfUserExists = async (email) => {
-  return await UserModel.checkIfUserExists(email);
+  return await userModel.checkIfUserExists(email);
 };
 
 // Get user by ID
 const getUserById = async (id) => {
-  return await UserModel.findUserById(id);
+  return await userModel.findUserById(id);
 };
 
 // Delete a user by ID
 const deleteUser = async (id) => {
-  return await UserModel.deleteUserById(id);
+  return await userModel.deleteUserById(id);
 };
 
 module.exports = {
