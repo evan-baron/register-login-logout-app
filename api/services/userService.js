@@ -21,17 +21,18 @@ const createUser = async (first_name, last_name, email, password) => {
 
 // Authenticate a user
 const authenticateUser = async (email, password) => {
-  const user = await userModel.findUserByEmail(email);
-
-  if (!user) {
+  const hashedPassword = await userModel.getPasswordByEmail(email);
+  if (!hashedPassword) {
     return { success: false, message: 'Incorrect email or password.' };
   }
 
   // Compare input password with stored hash
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, hashedPassword);
   if (!isMatch) {
     return { success: false, message: 'Incorrect email or password.' };
   }
+
+  const user = await userModel.findUserByEmail(email);
 
   return { success: true, user };
 }

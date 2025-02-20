@@ -23,10 +23,19 @@ const User = {
   // Get a user by email
   async findUserByEmail(email) {
     const [rows] = await pool.execute(
-      'SELECT * FROM users WHERE email = ?',
+      'SELECT id, first_name, last_name, email, created_at FROM users WHERE email = ?',
       [email]
     );
     return rows[0]; // Return the first matching user (or null if none)
+  },
+
+  // Get password by email
+  async getPasswordByEmail(email) {
+    const [rows] = await pool.execute(
+      'SELECT password FROM users WHERE email = ?',
+      [email]
+    );
+    return rows[0]?.password || null;
   },
 
   // Check if a user exists by email

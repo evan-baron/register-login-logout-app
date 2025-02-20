@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import '../style.scss';
 import Navbar from '../components/Navbar';
@@ -9,15 +9,21 @@ import Register from '../pages/Register';
 import Login from '../pages/Login';
 
 const App = () => {
+	const [user, setUser] = useState(null);
+
+	useEffect(() => {
+		console.log('useEffect triggered!');
+	}, [user])
+
 	return (
 		<div className='app'>
 			<div className='container'>
 				<BrowserRouter>
-					<Navbar />
+					<Navbar user={user} setUser={setUser} />
 					<Routes>
 						<Route path='/' element={<Home />} />
 						<Route path='/register' element={<Register />} />
-						<Route path='/login' element={<Login />} />
+						<Route path='/login' element={<Login user={user} setUser={setUser} />} />
 					</Routes>
 				</BrowserRouter>
 			</div>

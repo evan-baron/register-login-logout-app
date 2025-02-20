@@ -3,7 +3,7 @@ import axiosInstance from '../utils/axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-const Login = () => {
+const Login = ({ user, setUser }) => {
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
@@ -48,6 +48,11 @@ const Login = () => {
 				  email: '',
 				  password: ''
 				});
+
+				// Sets current user
+				console.log('Current user: ')
+				console.log(response.data.user);
+				setUser(response.data);
 		
 				// // Redirects to home
 				navigate('/');
