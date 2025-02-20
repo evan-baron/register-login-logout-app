@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Check, Close, Visibility } from '@mui/icons-material';
+import { Check, Close, Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Register = () => {
 	const [formData, setFormData] = useState({
@@ -66,57 +66,56 @@ const Register = () => {
 	};
 
 	const handleSubmit = async () => {
-  
 		setFormSubmitted(true);
-	  
-		if (!emailValid || !passwordValid) {
-		  console.log(
-			'Registration Error! Email Valid: ' +
-			  emailValid +
-			  ' Password Valid: ' +
-			  passwordValid
-		  );
-		  setFormComplete(false);
-		  return;
-		} else {
-		  console.log('Registration complete!');
-		  try {
-			const response = await axiosInstance.post('/register', {
-			  firstname: formData.firstname.trim(),
-			  lastname: formData.lastname.trim(),
-			  email: formData.email.trim(),
-			  password: formData.password.trim(),
-			});
-			console.log(response.data);
-	  
-			// Reset the form and related states
-			setFormData({
-			  firstname: '',
-			  lastname: '',
-			  email: '',
-			  password: '',
-			  confirm: '',
-			});
-	  
-			// Reset other relevant states
-			setPasswordMatch(null);
-			setPasswordVisible(false);
-			setFormComplete(false);
-			setEmailValid(null);
-			setPasswordValid(null);
-			setFormSubmitted(false);
-	  
-			// Redirects to home
-			navigate('/');
 
-		  } catch (error) {
-			console.error('Registration error: ', error.response?.data);
-			setRegistrationError(error.response ? error.response.data.message : 'An error occurred');
+		if (!emailValid || !passwordValid) {
+			console.log(
+				'Registration Error! Email Valid: ' +
+					emailValid +
+					' Password Valid: ' +
+					passwordValid
+			);
 			setFormComplete(false);
-		  }
+			return;
+		} else {
+			console.log('Registration complete!');
+			try {
+				const response = await axiosInstance.post('/register', {
+					firstname: formData.firstname.trim(),
+					lastname: formData.lastname.trim(),
+					email: formData.email.trim(),
+					password: formData.password.trim(),
+				});
+				console.log(response.data);
+
+				// Reset the form and related states
+				setFormData({
+					firstname: '',
+					lastname: '',
+					email: '',
+					password: '',
+					confirm: '',
+				});
+
+				// Reset other relevant states
+				setPasswordMatch(null);
+				setPasswordVisible(false);
+				setFormComplete(false);
+				setEmailValid(null);
+				setPasswordValid(null);
+				setFormSubmitted(false);
+
+				// Redirects to home
+				navigate('/');
+			} catch (error) {
+				console.error('Registration error: ', error.response?.data);
+				setRegistrationError(
+					error.response ? error.response.data.message : 'An error occurred'
+				);
+				setFormComplete(false);
+			}
 		}
-	  };
-	  
+	};
 
 	return (
 		<div className='auth' role='main'>
@@ -178,6 +177,7 @@ const Register = () => {
 						aria-label='Enter your password'
 					/>
 					{formData.password ? (
+						passwordVisible ? 
 						<Visibility
 							className='visible'
 							role='button'
@@ -188,7 +188,22 @@ const Register = () => {
 							}}
 							sx={{
 								fontSize: '1.75rem',
-								color: passwordVisible ? 'rgb(40, 40, 40)' : '#bbbbbb',
+								color: '#777777',
+								outline: 'none',
+							}}
+						/>
+						:
+						<VisibilityOff 
+							className='visible'
+							role='button'
+							tabIndex='0'
+							aria-label='Toggle password visibility'
+							onClick={() => {
+								setPasswordVisible((prev) => !prev);
+							}}
+							sx={{
+								fontSize: '1.75rem',
+								color: '#777777',
 								outline: 'none',
 							}}
 						/>

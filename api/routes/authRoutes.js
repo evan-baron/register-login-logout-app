@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
 			httpOnly: true, // Prevents JavaScript access
 			secure: process.env.NODE_ENV === 'production', // Uses secure cookies in production
 			sameSite: 'Strict', // Protects against CSRF
-			maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+			maxAge: 60 * 60 * 1000, // 1 hour
 		});
 
 		res.status(201).json({

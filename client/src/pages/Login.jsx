@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Visibility } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login = () => {
 	const [formData, setFormData] = useState({
@@ -89,6 +89,7 @@ const Login = () => {
 						aria-label='Enter your password'
 					/>
 					{formData.password ? (
+						passwordVisible ? 
 						<Visibility
 							className='visible'
 							role='button'
@@ -99,7 +100,22 @@ const Login = () => {
 							}}
 							sx={{
 								fontSize: '1.75rem',
-								color: passwordVisible ? 'rgb(40, 40, 40)' : '#bbbbbb',
+								color: '#777777',
+								outline: 'none',
+							}}
+						/>
+						:
+						<VisibilityOff 
+							className='visible'
+							role='button'
+							tabIndex='0'
+							aria-label='Toggle password visibility'
+							onClick={() => {
+								setPasswordVisible((prev) => !prev);
+							}}
+							sx={{
+								fontSize: '1.75rem',
+								color: '#777777',
 								outline: 'none',
 							}}
 						/>
