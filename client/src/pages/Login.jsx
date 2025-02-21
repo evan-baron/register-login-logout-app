@@ -40,6 +40,7 @@ const Login = ({ user, setUser }) => {
 				const response = await axiosInstance.post('/login', {
 				  email: formData.email,
 				  password: formData.password,
+				  checked: checked
 				});
 				console.log('Login successful!')
 				console.log(response.data);

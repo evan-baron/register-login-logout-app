@@ -11,18 +11,22 @@ router.use(cookieParser());
 
 router.get('/authenticate', async (req, res) => {
 	const token = req.headers.authorization?.split(' ')[1] || req.cookies.session_token;
+	console.log(token);
 
 	if (!token) {
 		return res.status(401).json({ message: 'No token provided' });
 	}
 
 	try {
+		console.log('Verifying token...');
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		console.log('Decoded token:', decoded);
 
 		const user = await userService.getUserById(decoded.userId);
 
 		return res.json({ user: user });
 	} catch (error) {
+		console.error('Error during token verification:', error.message);
 		return res.status(401).json({ message: 'Invalid or expired token' });
 	}
 });
@@ -43,10 +47,10 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-	const { email, password } = req.body;
+	const { email, password, checked } = req.body;
 
 	try {
-		const { user, token } = await authService.login(email, password);
+		const { user, token } = await authService.login(email, password, checked);
 
 		// Set HTTP-only cookie (more secure)
 		res.cookie('session_token', token, {

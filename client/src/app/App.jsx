@@ -21,10 +21,10 @@ const App = () => {
 
 			if (token) {
 				console.log('Token exists!');
+				console.log(token);
 				try {
 					const response = await axiosInstance.get('/authenticate', {
-						headers: { Authorization: `Bearer ${token}` },
-						withCredentials: true,
+						headers: { Authorization: `Bearer ${token}` }
 					})
 
 					setUser(response.data);
@@ -52,7 +52,7 @@ const App = () => {
 		}
 
 		fetchUserData();
-	}, []);
+	}, [loading]);
 
 	useEffect(() => {
 		console.log('useEffect triggered!');
@@ -64,7 +64,7 @@ const App = () => {
 				<BrowserRouter>
 					<Navbar user={user} setUser={setUser} />
 					<Routes>
-						<Route path='/' element={<Home loading={loading} user={user} setUser={setUser} />} />
+						<Route path='/' element={<Home loading={loading} user={user} />} />
 						<Route path='/register' element={user ? <Navigate to='/' /> : <Register />} />
 						<Route path='/login' element={user ? <Navigate to='/' /> : <Login user={user} setUser={setUser} />} />
 					</Routes>

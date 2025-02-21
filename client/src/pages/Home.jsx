@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Home = ({ loading, user, setUser }) => {
+const Home = ({ loading, user }) => {
 	return (
 		<div className="home">
 			<div className="home-container">

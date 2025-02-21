@@ -17,14 +17,14 @@ const register = async (firstname, lastname, email, password) => {
 	}
 };
 
-const login = async (email, password) => {
+const login = async (email, password, checked) => {
 	const user = await userService.authenticateUser(email, password);
 
 	if (user.success) {
 		const token = jwt.sign(
 			{ userId: user.user.id, email: user.user.email },
 			process.env.JWT_SECRET,
-			{ expiresIn: '1h' }
+			checked ? {} : { expiresIn: '1h' } // If checked is true, no expiration time
 		)
 		return { user: user.user, token };
 	} else {

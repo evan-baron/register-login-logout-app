@@ -11,6 +11,7 @@ const Navbar = ({ user, setUser }) => {
 			console.error('Logout failed: ', error.response?.data || error.message);
 		}
 		localStorage.removeItem('token');
+		localStorage.removeItem('user');
 	};
 
 	return (
