@@ -10,8 +10,7 @@ const { authenticateUser } = require('../middlewares/authMiddleware');
 router.use(cookieParser());
 
 router.get('/authenticate', async (req, res) => {
-	const token = req.headers.authorization?.split(' ')[1];
-	console.log(req.headers.authorization?.split(' ')[1]);
+	const token = req.headers.authorization?.split(' ')[1] || req.cookies.session_token;
 
 	if (!token) {
 		return res.status(401).json({ message: 'No token provided' });
@@ -20,11 +19,7 @@ router.get('/authenticate', async (req, res) => {
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-		req.user = decoded;
-		console.log(req.user);
-
-		const user = await userService.getUserById(req.user.userId);
-		console.log(user);
+		const user = await userService.getUserById(decoded.userId);
 
 		return res.json({ user: user });
 	} catch (error) {

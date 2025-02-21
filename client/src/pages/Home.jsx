@@ -6,21 +6,34 @@ const Home = ({ user, setUser }) => {
 
 	useEffect(() => {
 		const fetchUserData = async () => {
-			const token = localStorage.getItem('token');
+			const token = localStorage.getItem('token')
+
 			if (token) {
 				console.log('Token exists!');
 				console.log(token);
 				try {
 					const response = await axiosInstance.get('/authenticate', {
 						headers: { Authorization: `Bearer ${token}` },
+						withCredentials: true,
 					})
 
 					setUser(response.data);
 				} catch (error) {
 					console.error('Error authenticating: ', error);
 				}
+			} else if (!token) {
+				console.log('No token found. Checking cookies...');
+				try { 
+					const response = await axiosInstance.get('/authenticate', {
+						withCredneitials: true,
+					});
+
+					setUser(response.data);
+				} catch (error) {
+					console.error('Error authenticating: ', error);
+				}
 			} else {
-				console.log('No token found. Please log in.');
+				console.log('No tokens found. Please log in.');
 			}
 		}
 
