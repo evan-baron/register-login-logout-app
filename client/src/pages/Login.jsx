@@ -140,10 +140,14 @@ const Login = ({ user, setUser }) => {
 				</div>
 
 				<div className='remember-me'>
-					{checked ? 					<CheckBox
-						onClick={() => setChecked((prev) => !prev)}
-						sx={{ color: 'rgba(0, 120, 120, 1)' }}
-					/> : <CheckBoxOutlineBlank onClick={() => setChecked((prev) => !prev)} />}
+					{checked ? (
+						<CheckBox
+							onClick={() => setChecked((prev) => !prev)}
+							sx={{ color: 'rgba(0, 120, 120, 1)' }}
+						/>
+					) : (
+						<CheckBoxOutlineBlank sx={{ color: '#444444' }} onClick={() => setChecked((prev) => !prev)} />
+					)}
 					<span>Remember me</span>
 				</div>
 
