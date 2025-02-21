@@ -47,6 +47,70 @@ html, body, #root {
 			}
 		}
 
+		//HOME
+		.home {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: $masterBackground;
+			height: 100%;
+			width: 100%;
+
+			.home-container {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				font-size: 1.5rem;
+				gap: .5rem;
+				transform: translateY(-3rem);
+
+				h1 {
+					font-size: 3rem;
+					margin: 0;
+					padding: 0;
+					line-height: 1;
+					color: teal;
+				}
+
+				.button-container {
+					position: relative;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					padding: 2rem;
+					background-color: white;
+					gap: 1rem;
+					width: 20rem;
+					border-radius: 5px;
+					box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 25px rgba(0, 0, 0, 0.05);
+					
+					.button {
+						align-self: center;
+						text-align: center;
+						border: none;
+						border-radius: 5px;
+						font-size: 1.5rem;
+						padding: 1rem;
+						width: 80%;
+						color: white;
+						background-color: $masterButton;
+					}
+					
+					p {
+						color: $darkGray;
+					}
+				}
+
+				h2 {
+					font-size: 2rem;
+					color: teal;
+				}
+
+			}
+		}
+
 		//LOGIN & REGISTER
 		.auth {
 			display: flex;

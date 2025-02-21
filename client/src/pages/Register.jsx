@@ -106,7 +106,7 @@ const Register = () => {
 				setFormSubmitted(false);
 
 				// Redirects to home
-				navigate('/');
+				navigate('/login');
 			} catch (error) {
 				console.error('Registration error: ', error.response?.data);
 				setRegistrationError(
