@@ -1,7 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../utils/axios';
 
-const Home = ({ user }) => {
+const Home = ({ user, setUser }) => {
+
+	useEffect(() => {
+		const fetchUserData = async () => {
+			const token = localStorage.getItem('token');
+			if (token) {
+				console.log('Token exists!');
+				console.log(token);
+				try {
+					const response = await axiosInstance.get('/authenticate', {
+						headers: { Authorization: `Bearer ${token}` },
+					})
+
+					setUser(response.data);
+				} catch (error) {
+					console.error('Error authenticating: ', error);
+				}
+			} else {
+				console.log('No token found. Please log in.');
+			}
+		}
+
+		fetchUserData();
+	}, []);
+
 
 	return (
 		<div className="home">

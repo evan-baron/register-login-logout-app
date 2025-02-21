@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { CheckBox, CheckBoxOutlineBlank, Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login = ({ user, setUser }) => {
 	const [formData, setFormData] = useState({
@@ -9,6 +9,7 @@ const Login = ({ user, setUser }) => {
 		password: '',
 	});
 	const [passwordVisible, setPasswordVisible] = useState(false);
+	const [checked, setChecked] = useState(false);
 	const [formComplete, setFormComplete] = useState(false);
 	const [loginError, setLoginError] = useState(null);
 
@@ -42,6 +43,15 @@ const Login = ({ user, setUser }) => {
 				});
 				console.log('Login successful!')
 				console.log(response.data);
+
+				const { token } = response.data;
+
+				// Store token in localstorage if remember me checked
+				if (checked) {
+					localStorage.setItem('token', token);
+				} else {
+					sessionStorage.setItem('token', token);
+				}
 		
 				// Reset the form and related states
 				setFormData({
@@ -94,37 +104,46 @@ const Login = ({ user, setUser }) => {
 						aria-label='Enter your password'
 					/>
 					{formData.password ? (
-						passwordVisible ? 
-						<Visibility
-							className='visible'
-							role='button'
-							tabIndex='0'
-							aria-label='Toggle password visibility'
-							onClick={() => {
-								setPasswordVisible((prev) => !prev);
-							}}
-							sx={{
-								fontSize: '1.75rem',
-								color: '#777777',
-								outline: 'none',
-							}}
-						/>
-						:
-						<VisibilityOff 
-							className='visible'
-							role='button'
-							tabIndex='0'
-							aria-label='Toggle password visibility'
-							onClick={() => {
-								setPasswordVisible((prev) => !prev);
-							}}
-							sx={{
-								fontSize: '1.75rem',
-								color: '#777777',
-								outline: 'none',
-							}}
-						/>
+						passwordVisible ? (
+							<Visibility
+								className='visible'
+								role='button'
+								tabIndex='0'
+								aria-label='Toggle password visibility'
+								onClick={() => {
+									setPasswordVisible((prev) => !prev);
+								}}
+								sx={{
+									fontSize: '1.75rem',
+									color: '#777777',
+									outline: 'none',
+								}}
+							/>
+						) : (
+							<VisibilityOff
+								className='visible'
+								role='button'
+								tabIndex='0'
+								aria-label='Toggle password visibility'
+								onClick={() => {
+									setPasswordVisible((prev) => !prev);
+								}}
+								sx={{
+									fontSize: '1.75rem',
+									color: '#777777',
+									outline: 'none',
+								}}
+							/>
+						)
 					) : null}
+				</div>
+
+				<div className='remember-me'>
+					{checked ? 					<CheckBox
+						onClick={() => setChecked((prev) => !prev)}
+						sx={{ color: 'rgba(0, 120, 120, 1)' }}
+					/> : <CheckBoxOutlineBlank onClick={() => setChecked((prev) => !prev)} />}
+					<span>Remember me</span>
 				</div>
 
 				<button

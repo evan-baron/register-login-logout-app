@@ -157,6 +157,7 @@ html, body, #root {
 					padding-left: 0.25rem;
 					font-size: 1.125rem;
 					background-color: #effffe;
+					color: $darkGray;
 					width: 100%;
 
 					&:focus {
@@ -186,6 +187,14 @@ html, body, #root {
 				.visible {
 					position: absolute;
 					right: 0.25rem;
+				}
+
+				.remember-me {
+					display: flex;
+					align-items: center;
+					gap: .5rem;
+					color: $darkGray;
+					font-size: 1rem;
 				}
 
 				button {

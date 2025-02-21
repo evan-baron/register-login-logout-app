@@ -14,7 +14,7 @@ const User = {
   // Get a user by ID
   async findUserById(id) {
     const [rows] = await pool.execute(
-      'SELECT * FROM users WHERE id = ?',
+      'SELECT id, first_name, last_name, email, created_at FROM users WHERE id = ?',
       [id]
     );
     return rows[0];

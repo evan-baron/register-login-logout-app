@@ -10,6 +10,7 @@ const Navbar = ({ user, setUser }) => {
 		} catch (error) {
 			console.error('Logout failed: ', error.response?.data || error.message);
 		}
+		localStorage.removeItem('token');
 	};
 
 	return (
