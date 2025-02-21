@@ -197,6 +197,14 @@ html, body, #root {
 					font-size: 1rem;
 				}
 
+				.forgot-password {
+					display: flex;
+					margin-left: auto;
+					color: teal;
+					font-weight: bold;
+					text-decoration: underline;
+				}
+
 				button {
 					align-self: center;
 					border: none;

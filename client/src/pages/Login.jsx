@@ -149,7 +149,9 @@ const Login = ({ user, setUser }) => {
 						<CheckBoxOutlineBlank sx={{ color: '#444444' }} onClick={() => setChecked((prev) => !prev)} />
 					)}
 					<span>Remember me</span>
+					<span className="forgot-password">Forgot password?</span>
 				</div>
+
 
 				<button
 					type='button'
