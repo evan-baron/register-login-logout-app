@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { CheckBox, CheckBoxOutlineBlank, Visibility, VisibilityOff } from '@mui/icons-material';
+import {
+	CheckBox,
+	CheckBoxOutlineBlank,
+	Visibility,
+	VisibilityOff,
+} from '@mui/icons-material';
 
-const Login = ({ user, setUser }) => {
+const Login = ({ setUser }) => {
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
@@ -20,7 +25,7 @@ const Login = ({ user, setUser }) => {
 
 		setFormData((prev) => ({
 			...prev,
-			[name]: value
+			[name]: value,
 		}));
 
 		setLoginError(null);
@@ -32,17 +37,17 @@ const Login = ({ user, setUser }) => {
 		} else {
 			setFormComplete(false);
 		}
-	}, [formData.email, formData.password])
+	}, [formData.email, formData.password]);
 
 	const handleSubmit = async () => {
 		if (formComplete) {
 			try {
 				const response = await axiosInstance.post('/login', {
-				  email: formData.email,
-				  password: formData.password,
-				  checked: checked
+					email: formData.email,
+					password: formData.password,
+					checked: checked,
 				});
-				console.log('Login successful!')
+				console.log('Login successful!');
 				console.log(response.data);
 
 				const { token } = response.data;
@@ -53,24 +58,25 @@ const Login = ({ user, setUser }) => {
 				} else {
 					sessionStorage.setItem('token', token);
 				}
-		
+
 				// Reset the form and related states
 				setFormData({
-				  email: '',
-				  password: ''
+					email: '',
+					password: '',
 				});
 
 				// Sets current user
-				console.log('Current user: ')
+				console.log('Current user: ');
 				console.log(response.data.user);
 				setUser(response.data);
-		
+
 				// // Redirects to home
 				navigate('/');
-
 			} catch (error) {
 				console.error('Login error: ', error.response?.data);
-				setLoginError(error.response ? error.response.data.message : 'An error occurred');
+				setLoginError(
+					error.response ? error.response.data.message : 'An error occurred'
+				);
 				setFormComplete(false);
 			}
 		}
@@ -146,12 +152,21 @@ const Login = ({ user, setUser }) => {
 							sx={{ color: 'rgba(0, 120, 120, 1)' }}
 						/>
 					) : (
-						<CheckBoxOutlineBlank sx={{ color: '#444444' }} onClick={() => setChecked((prev) => !prev)} />
+						<CheckBoxOutlineBlank
+							sx={{ color: '#444444' }}
+							onClick={() => setChecked((prev) => !prev)}
+						/>
 					)}
 					<span>Remember me</span>
-					<span className="forgot-password">Forgot password?</span>
+					<Link
+						to='/recovery'
+						role='link'
+						aria-label='Go to recover password page'
+						className='forgot-password'
+					>
+						Forgot password?
+					</Link>
 				</div>
-
 
 				<button
 					type='button'

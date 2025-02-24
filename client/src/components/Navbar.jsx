@@ -12,6 +12,7 @@ const Navbar = ({ user, setUser }) => {
 		}
 		localStorage.removeItem('token');
 		localStorage.removeItem('user');
+		setUser(null);
 	};
 
 	return (
