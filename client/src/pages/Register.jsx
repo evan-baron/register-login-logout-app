@@ -78,7 +78,6 @@ const Register = () => {
 			setFormComplete(false);
 			return;
 		} else {
-			console.log('Registration complete!');
 			try {
 				const response = await axiosInstance.post('/register', {
 					firstname: formData.firstname.trim(),
@@ -86,6 +85,7 @@ const Register = () => {
 					email: formData.email.trim(),
 					password: formData.password.trim(),
 				});
+				console.log('Registration complete!');
 				console.log(response.data);
 
 				// Reset the form and related states

@@ -51,8 +51,7 @@ const deleteUser = async (id) => {
 
 // Get a user by email
 const getUserByEmail = async (email) => {
-  const user = await userModel.findUserByEmail(email);
-  return { user }; 
+  return await userModel.findUserByEmail(email);
 };
 
 // Get user by ID
