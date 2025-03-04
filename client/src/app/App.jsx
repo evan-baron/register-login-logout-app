@@ -70,7 +70,7 @@ const App = () => {
 						<Route path='/register' element={user ? <Navigate to='/' /> : <Register />} />
 						<Route path='/login' element={user ? <Navigate to='/' /> : <Login setUser={setUser} />} />
 						<Route path='/recovery' element={user ? <Navigate to='/' /> : <PasswordRecovery />} />
-						<Route path='/reset-password' element={user ? <Navigate to='/' /> : <PasswordReset />} />
+						<Route path='/reset-password/:token' element={user ? <Navigate to='/' /> : <PasswordReset />} />
 					</Routes>
 				</BrowserRouter>
 			</div>

@@ -40,6 +40,56 @@ const PasswordReset = () => {
 		setRegistrationError(null);
 	};
 
+	const handleSubmit = async () => {
+		setFormSubmitted(true);
+
+		if (!passwordValid) {
+			console.log(
+				'Registration Error! Email Valid: Password Valid: ' + passwordValid
+			);
+			setFormComplete(false);
+			return;
+		} else {
+			// try {
+			// 	const response = await axiosInstance.post('/register', {
+			// 		firstname: formData.firstname.trim(),
+			// 		lastname: formData.lastname.trim(),
+			// 		email: formData.email.trim(),
+			// 		password: formData.password.trim(),
+			// 	});
+			// 	console.log('Registration complete!');
+			// 	console.log(response.data);
+
+			// 	// Reset the form and related states
+			// 	setFormData({
+			// 		firstname: '',
+			// 		lastname: '',
+			// 		email: '',
+			// 		password: '',
+			// 		confirm: '',
+			// 	});
+
+			// 	// Reset other relevant states
+			// 	setPasswordMatch(null);
+			// 	setPasswordVisible(false);
+			// 	setFormComplete(false);
+			// 	setEmailValid(null);
+			// 	setPasswordValid(null);
+			// 	setFormSubmitted(false);
+
+			// 	// Redirects to home
+			// 	navigate('/login');
+			// } catch (error) {
+			// 	console.error('Registration error: ', error.response?.data);
+			// 	setRegistrationError(
+			// 		error.response ? error.response.data.message : 'An error occurred'
+			// 	);
+			// 	setFormComplete(false);
+			// }
+		}
+	};
+
+
 	return (
 		<div className='auth' role='main'>
 			<section aria-labelledby='password-recovery-form'>
@@ -136,7 +186,7 @@ const PasswordReset = () => {
 						type='button'
 						role='button'
 						aria-label='Submit registration form'
-						// onClick={handleSubmit}
+						onClick={handleSubmit}
 						disabled={!formComplete}
 						style={{
 							backgroundColor: formComplete ? null : 'rgba(0, 120, 120, .5)',
