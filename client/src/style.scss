@@ -126,14 +126,21 @@ html, body, #root {
 				color: teal;
 			}
 
-			form {
+			section {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;;
+			}
+
+			form, .recovery-sent {
 				position: relative;
 				display: flex;
 				flex-direction: column;
 				padding: 2rem;
 				background-color: white;
 				gap: 1rem;
-				width: 20rem;
+				width: 22rem;
 				border-radius: 5px;
 				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 25px rgba(0, 0, 0, 0.05);
 

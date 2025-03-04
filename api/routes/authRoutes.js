@@ -67,23 +67,28 @@ router.post('/logout', authenticateUser, (req, res) => {
 
 router.post('/recover-password', async (req, res) => {
 	const { email } = req.body;
-
-	const recoveryToken = userService.generateRecoveryToken();
 	
 	try {
 		const user = await userService.getUserByEmail(email);
 
+		if (!user) {
+			return res.status(400).json({ message: 'User not found' });
+		}
+
+		const recoveryToken = await userService.generateRecoveryToken(email);
+		
 		try {
 			await mailService.sendPasswordResetEmail(user, recoveryToken);
 		} catch (err) {
 			console.log('There was an error: ', err.message)
+			return res.status(500).json({ message: 'Error sending password reset email' });
 		}
 
 		res.status(201).json({
 			message: 'User found, recovery email sent!'
 		});
 	} catch (err) {
-		console.log('destructuring failed');
+		console.log('User not found');
 		res.status(400).json({ message: err.message });
 	}
 });

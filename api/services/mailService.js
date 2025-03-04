@@ -27,7 +27,7 @@ const sendPasswordResetEmail = async (user, resetToken) => {
 	const { email } = user;
 
 	//UPDATE BELOW WHEN YOU ADD THAT PART IN
-	const resetLink = 'https://localhost:5173/reset-password?token=${resetToken}';
+	const resetLink = `https://localhost:5173/reset-password?token=${resetToken}`;
 
 	const htmlContent = getTemplate('passwordReset', {
 		resetLink,
