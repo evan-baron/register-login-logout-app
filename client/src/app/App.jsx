@@ -8,6 +8,7 @@ import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
 import PasswordRecovery from '../pages/PasswordRecovery';
+import PasswordReset from '../pages/PasswordReset';
 
 // Components
 import Navbar from '../components/Navbar';
@@ -69,6 +70,7 @@ const App = () => {
 						<Route path='/register' element={user ? <Navigate to='/' /> : <Register />} />
 						<Route path='/login' element={user ? <Navigate to='/' /> : <Login setUser={setUser} />} />
 						<Route path='/recovery' element={user ? <Navigate to='/' /> : <PasswordRecovery />} />
+						<Route path='/reset-password' element={user ? <Navigate to='/' /> : <PasswordReset />} />
 					</Routes>
 				</BrowserRouter>
 			</div>
