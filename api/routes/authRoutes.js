@@ -69,15 +69,12 @@ router.post('/recover-password', async (req, res) => {
 	const { email } = req.body;
 
 	const recoveryToken = userService.generateRecoveryToken();
-	console.log(recoveryToken);
 	
 	try {
-		const { user } = await userService.getUserByEmail(email);
-
-		console.log(user.email);
+		const user = await userService.getUserByEmail(email);
 
 		try {
-			await mailService.sendPasswordResetEmail(user.email, recoveryToken);
+			await mailService.sendPasswordResetEmail(user, recoveryToken);
 		} catch (err) {
 			console.log('There was an error: ', err.message)
 		}
@@ -86,6 +83,7 @@ router.post('/recover-password', async (req, res) => {
 			message: 'User found, recovery email sent!'
 		});
 	} catch (err) {
+		console.log('destructuring failed');
 		res.status(400).json({ message: err.message });
 	}
 });
