@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import axiosInstance from '../utils/axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Check, Close, Visibility, VisibilityOff } from '@mui/icons-material';
 
 const PasswordReset = () => {
+	const [searchParams] = useSearchParams();
+	const token = searchParams.get('token');
+
 	const [passwordMatch, setPasswordMatch] = useState(null);
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [passwordValid, setPasswordValid] = useState(null);
@@ -14,6 +20,38 @@ const PasswordReset = () => {
 	});
 	const [formSubmitted, setFormSubmitted] = useState(null);
 	const [errorMessage, setErrorMessage] = useState(null);
+
+	const navigate = useNavigate();
+
+	dayjs.extend(utc);
+	dayjs.extend(timezone);
+
+	useEffect(() => {
+		const validateRecoveryToken = async () => {
+			if (!token) {
+				console.log('No token found. Redirecting to home.');
+				navigate('/');
+			} else {
+				console.log('Token exists: ', token);
+				try {
+					const response = await axiosInstance.get('/authenticateRecoveryToken', { params: { token: token } });
+					const tokenCreatedAt = response.data.timestamp[0].created_at;
+					const now = dayjs().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+					const difference = dayjs(now).diff(dayjs(tokenCreatedAt));
+
+					console.log(tokenCreatedAt);
+					console.log(now);
+
+					console.log(difference);
+					
+				} catch (error) {
+					console.error('Error authenticating token: ', error);
+				}
+			}
+		}
+		validateRecoveryToken();
+	}, [token])
 
 	useEffect(() => {
 		const passwordsMatch =
@@ -43,6 +81,8 @@ const PasswordReset = () => {
 	const handleSubmit = async () => {
 		setFormSubmitted(true);
 
+		const timestamp = dayjs().tz('America/Denver').format('YYYY-MM-DD HH:mm:ss');
+
 		if (!passwordValid) {
 			console.log(
 				'Registration Error! Email Valid: Password Valid: ' + passwordValid
@@ -50,12 +90,12 @@ const PasswordReset = () => {
 			setFormComplete(false);
 			return;
 		} else {
+			setFormComplete(false);
 			// try {
-			// 	const response = await axiosInstance.post('/register', {
-			// 		firstname: formData.firstname.trim(),
-			// 		lastname: formData.lastname.trim(),
-			// 		email: formData.email.trim(),
+			// 	const response = await axiosInstance.post('/reset-password', {
+			// 		token, // Sending token in the request body
 			// 		password: formData.password.trim(),
+			// 		timestamp,
 			// 	});
 			// 	console.log('Registration complete!');
 			// 	console.log(response.data);
@@ -81,7 +121,7 @@ const PasswordReset = () => {
 			// 	navigate('/login');
 			// } catch (error) {
 			// 	console.error('Registration error: ', error.response?.data);
-			// 	setRegistrationError(
+			// 	setErrorMessage(
 			// 		error.response ? error.response.data.message : 'An error occurred'
 			// 	);
 			// 	setFormComplete(false);

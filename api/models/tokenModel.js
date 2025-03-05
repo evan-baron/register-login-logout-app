@@ -19,6 +19,15 @@ const Token = {
 		);
 		return rows[0];
 	},
+
+	// Get token created timestamp
+	async getRecoveryTokenTimestamp(token) {
+		const [result] = await pool.execute(
+			'SELECT created_at FROM email_recovery_tokens WHERE token = ?',
+			[token]
+		);
+		return result;
+	}
 }
 
 module.exports = Token;

@@ -76,16 +76,27 @@ const generateRecoveryToken = async (email, length = 32) => {
 		await tokenModel.createRecoveryToken(email, recoveryToken);
 		return recoveryToken;
 	} catch (err) {
-		console.log('There was an error: ', err.message)
+		console.log('There was an error: ', err.message);
 	}
 };
+
+// Get recovery token timestamp
+const getRecoveryTokenTimestamp = async (token) => {
+	try {
+		const recoveryTokenTimestamp = await tokenModel.getRecoveryTokenTimestamp(token);
+		return recoveryTokenTimestamp;
+	} catch (err) {
+		console.log('There was an error: ', err.message);
+	}
+}
 
 module.exports = {
 	authenticateUser,
 	checkIfUserExists,
 	createUser,
 	deleteUser,
+	generateRecoveryToken,
+	getRecoveryTokenTimestamp,
 	getUserByEmail,
 	getUserById,
-	generateRecoveryToken,
 };

@@ -5,7 +5,7 @@ const router = express.Router();
 const authService = require('../services/authService');
 const userService = require('../services/userService');
 const mailService = require('../services/mailService');
-const { authenticateUser } = require('../middlewares/authMiddleware');
+const { authenticateUser, authenticateRecoveryToken } = require('../middlewares/authMiddleware');
 
 // Middleware to parse cookies
 router.use(cookieParser());
@@ -28,6 +28,23 @@ router.get('/authenticate', async (req, res) => {
 	} catch (error) {
 		console.error('Error during token verification:', error.message);
 		return res.status(401).json({ message: 'Invalid or expired token' });
+	}
+});
+
+router.get('/authenticateRecoveryToken', async (req, res) => {
+	const { token } = req.query;
+	console.log(token);
+	
+	if (!token) {
+		return res.status(400).json({ message: 'Recovery token is required.' });
+	}
+
+	try {
+		const tokenTimestamp = await userService.getRecoveryTokenTimestamp(token);
+		console.log(`Timestamp for ${token}: `, tokenTimestamp);
+		return res.json({ timestamp: tokenTimestamp});
+	} catch (err) {
+		console.log('There was an error: ', err.message);
 	}
 });
 
@@ -91,6 +108,19 @@ router.post('/recover-password', async (req, res) => {
 		console.log('User not found');
 		res.status(400).json({ message: err.message });
 	}
+});
+
+router.post('/reset-password', async (req, res) => {
+    const { token, password, timestamp } = req.body; // Get token from request body instead of params
+
+    if (!token) {
+        return res.status(400).json({ message: "Reset token is required." });
+    }
+
+    console.log("Received token:", token);
+    console.log("New password:", password);
+	console.log("link clicked at: ", timestamp);
+
 });
 
 router.post('/register', async (req, res) => {
