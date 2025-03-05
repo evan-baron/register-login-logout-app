@@ -41,6 +41,7 @@ router.get('/authenticateRecoveryToken', async (req, res) => {
 
 	try {
 		const tokenData = await userService.getRecoveryTokenData(token);
+		console.log(tokenData.token_used);
 
 		const tokenCreatedAt = tokenData.created_at;
 		const expiresAt = dayjs(tokenCreatedAt).add(30, 'minute').$d;
@@ -50,7 +51,7 @@ router.get('/authenticateRecoveryToken', async (req, res) => {
 		const difference = Math.floor(dayjs(expiresAt).diff(dayjs(), 'second'));
 		console.log('difference: ', difference);
 
-		const isValid = difference < 1800;
+		const isValid = difference < 1800 && tokenData.token_used !== 1;
 		const timeRemaining = isValid ? (difference) : 0;
 
 		return res.json({ 
@@ -127,14 +128,20 @@ router.post('/recover-password', async (req, res) => {
 });
 
 router.post('/reset-password', async (req, res) => {
-    const { token, password } = req.body; // Get token from request body instead of params
+    const { password, token } = req.body; // Get token from request body instead of params
 
     if (!token) {
         return res.status(400).json({ message: "Reset token is required." });
     }
 
-    console.log("Received token:", token);
-    console.log("New password:", password);
+	try {
+		await userService.updatePassword(password, token);
+		res.status(201).json({
+			message: 'Password updated!'
+		})
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
 
 });
 

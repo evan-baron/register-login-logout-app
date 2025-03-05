@@ -24,6 +24,7 @@ const PasswordReset = () => {
 	const [resendEmail, setResendEmail] = useState(null);
 	const [emailSent, setEmailSent] = useState(false);
 	const [timeRemaining, setTimeRemaining] = useState(null);
+	const [passwordReset, setPasswordReset] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -48,11 +49,10 @@ const PasswordReset = () => {
 
 					if (tokenValid) {
 						setTokenValid(true);
-						setTimeRemaining(timeRemaining)
+						setTimeRemaining(timeRemaining);
 					} else {
 						setTokenValid(false);
 					}
-
 				} catch (error) {
 					console.error('Error authenticating token: ', error);
 				}
@@ -100,10 +100,9 @@ const PasswordReset = () => {
 	};
 
 	const handleSubmit = async () => {
-		
 		if (tokenValid) {
 			setFormSubmitted(true);
-	
+
 			if (!passwordValid) {
 				console.log(
 					'Registration Error! Email Valid: Password Valid: ' + passwordValid
@@ -113,15 +112,24 @@ const PasswordReset = () => {
 			} else {
 				setFormComplete(false);
 				try {
-					const response = await axiosInstance.post('/reset-password', {
+					await axiosInstance.post('/reset-password', {
 						token: token, // Sending token in the request body
 						password: formData.password.trim(),
 					});
-					console.log('Reset password complete!');
-					console.log(response.data);
 
-					// DON'T FORGET TO CHANGE THINGS BACK TO FALSE/NULL/ETC
-	
+					// VALIDATION NEEDED IN FRONTEND AND BACKEND TO MAKE SURE NO SAME PASSWORD AS PREVIOUS, ETC.
+
+					setFormData({
+						password: '',
+						confirm: '',
+					});
+					setEmailSent(null);
+					setPasswordReset((prev) => !prev);
+					setPasswordValid(null);
+					setPasswordVisible(false);
+					setPasswordMatch(null);
+					setTokenValid(false);
+
 				} catch (error) {
 					console.error('Registration error: ', error.response?.data);
 					setErrorMessage(
@@ -129,18 +137,18 @@ const PasswordReset = () => {
 					);
 					setFormComplete(false);
 				}
-			}	
+			}
 		} else {
 			console.log(token);
 			console.log(resendEmail);
 			setFormComplete(true);
 			try {
+				setEmailSent(true);
 				const data = await axiosInstance.post('/recover-password', {
 					email: resendEmail,
 				});
 
 				if (data) {
-					setEmailSent(true);
 					setResendEmail(null);
 				}
 			} catch (error) {
@@ -161,9 +169,10 @@ const PasswordReset = () => {
 						<>
 							<h2>Please enter a new password.</h2>
 
-							{timeRemaining > 0 && (
+							{timeRemaining > 0 && timeRemaining <= 5 * 60 && (
 								<p>
-									Time remaining: {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, '0')}
+									Time remaining: {Math.floor(timeRemaining / 60)}:
+									{(timeRemaining % 60).toString().padStart(2, '0')}
 								</p>
 							)}
 
@@ -272,7 +281,7 @@ const PasswordReset = () => {
 								</p>
 							)}
 						</>
-					) : (
+					) : !passwordReset ? (
 						!emailSent ? (
 							<>
 								<h2>Sorry, your recovery link has expired.</h2>
@@ -313,20 +322,38 @@ const PasswordReset = () => {
 								</h2>
 							</>
 						)
+					) : (
+						<>
+							<h2>
+								Your password has been reset. Please return to the login page.
+							</h2>
+							<h2>
+								<Link
+									className='link'
+									to='/login'
+									role='link'
+									aria-label='Go to login page'
+								>
+									Return to Login
+								</Link>
+							</h2>
+						</>
 					)}
 
-					<span>
-						Return to Login?
-						<br />
-						<Link
-							className='link'
-							to='/login'
-							role='link'
-							aria-label='Go to login page'
-						>
-							Login
-						</Link>
-					</span>
+					{!passwordReset && (
+						<span>
+							Return to Login?
+							<br />
+							<Link
+								className='link'
+								to='/login'
+								role='link'
+								aria-label='Go to login page'
+							>
+								Login
+							</Link>
+						</span>
+					)}
 				</form>
 			</section>
 		</div>

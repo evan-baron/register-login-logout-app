@@ -29,13 +29,12 @@ const PasswordRecovery = () => {
 		if (formComplete) {
 			try {
 				setFormComplete(false);
+				setEmailSent(true);
 				const data = await axiosInstance.post('/recover-password', {
 					email: formData.email,
 				});
 
 				if (data) {
-					setEmailSent(true);
-
 					// Reset the form and related states
 					setFormData({
 						email: '',

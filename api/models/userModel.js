@@ -51,6 +51,12 @@ const User = {
 		const [result] = await pool.execute('DELETE FROM users WHERE id = ?', [id]);
 		return result.affectedRows > 0;
 	},
+
+	// Update user password
+	async updateUserPassword(hashedPassword, token) {
+		const [result] = await pool.execute('UPDATE users SET password = ? WHERE email = (SELECT user_email FROM email_recovery_tokens WHERE token = ?)', [hashedPassword, token]);
+		return result.affectedRows > 0;
+	},
 };
 
 module.exports = User;

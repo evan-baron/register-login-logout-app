@@ -90,6 +90,20 @@ const getRecoveryTokenData = async (token) => {
 	}
 }
 
+// Update password
+const updatePassword = async (password, token) => {
+	const hashedPassword = await bcrypt.hash(password, 10);
+
+	// ADD LOGIC TO MAKE SURE USER ISN'T USING SAME PASSWORD OR PREVIOUS PASSWORDS
+
+	try {
+		await userModel.updateUserPassword(hashedPassword, token);
+		await tokenModel.updateTokenUsed(token);
+	} catch (err) {
+		console.log('There was an error: ', err.message);
+	}
+}
+
 module.exports = {
 	authenticateUser,
 	checkIfUserExists,
@@ -99,4 +113,5 @@ module.exports = {
 	getRecoveryTokenData,
 	getUserByEmail,
 	getUserById,
+	updatePassword,
 };

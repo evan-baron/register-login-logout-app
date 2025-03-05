@@ -2,21 +2,6 @@ const jwt = require('jsonwebtoken');
 const userService = require('./userService'); 
 require("dotenv").config();
 
-const register = async (firstname, lastname, email, password) => {
-    // Find the user by email
-    const user = await userService.getUserByEmail(email);
-    if (user) {
-        throw new Error('An account with this email already exists.');
-    } else {
-		try {
-			const newUser = await userService.createUser(firstname, lastname, email, password);
-			return { user: newUser }
-		} catch (err) {
-			throw new Error('Error registering user: ' + err.message);
-		}
-	}
-};
-
 const login = async (email, password, checked) => {
 	const user = await userService.authenticateUser(email, password);
 
@@ -31,5 +16,20 @@ const login = async (email, password, checked) => {
 		throw new Error(user.message);
 	}
 }
+
+const register = async (firstname, lastname, email, password) => {
+    // Find the user by email
+    const user = await userService.getUserByEmail(email);
+    if (user) {
+        throw new Error('An account with this email already exists.');
+    } else {
+		try {
+			const newUser = await userService.createUser(firstname, lastname, email, password);
+			return { user: newUser }
+		} catch (err) {
+			throw new Error('Error registering user: ' + err.message);
+		}
+	}
+};
 
 module.exports = { register, login };
