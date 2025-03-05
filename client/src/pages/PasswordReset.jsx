@@ -23,12 +23,14 @@ const PasswordReset = () => {
 	const [tokenValid, setTokenValid] = useState(null);
 	const [resendEmail, setResendEmail] = useState(null);
 	const [emailSent, setEmailSent] = useState(false);
+	const [timeRemaining, setTimeRemaining] = useState(null);
 
 	const navigate = useNavigate();
 
 	dayjs.extend(utc);
 	dayjs.extend(timezone);
 
+	//Email Recovery Token Validation
 	useEffect(() => {
 		const validateRecoveryToken = async () => {
 			if (!token) {
@@ -43,9 +45,11 @@ const PasswordReset = () => {
 					const tokenCreatedAt = response.data.timestamp;
 					const now = dayjs().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 					const difference = dayjs(now).diff(dayjs(tokenCreatedAt)) / 1000 / 60;
+					console.log(difference);
 
 					if (difference < 10) {
 						setTokenValid(true);
+						setTimeRemaining(Math.floor(600 - (difference * 60)));
 					} else {
 						setTokenValid(false);
 						setResendEmail(response.data.email);
@@ -58,6 +62,21 @@ const PasswordReset = () => {
 		validateRecoveryToken();
 	}, [token]);
 
+	// Countdown Timer
+	useEffect(() => {
+		let timer;
+		if (tokenValid && timeRemaining > 0) {
+			console.log(timeRemaining);
+			timer = setInterval(() => {
+				setTimeRemaining((prev) => prev - 1);
+			}, 1000);
+		} else if (timeRemaining === 0) {
+			setTokenValid(false);
+		}
+		return () => clearInterval(timer);
+	}, [tokenValid, timeRemaining]);
+
+	// Password Match Validation
 	useEffect(() => {
 		const passwordsMatch =
 			formData.password !== '' && formData.password === formData.confirm;
@@ -162,6 +181,12 @@ const PasswordReset = () => {
 					{tokenValid ? (
 						<>
 							<h2>Please enter a new password.</h2>
+
+							{timeRemaining > 0 && (
+								<p>
+									Time remaining: {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, '0')}
+								</p>
+							)}
 
 							<label htmlFor='password'>New Password:</label>
 							<div className='input-container'>
