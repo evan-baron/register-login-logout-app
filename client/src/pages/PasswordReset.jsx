@@ -42,18 +42,17 @@ const PasswordReset = () => {
 						'/authenticateRecoveryToken',
 						{ params: { token: token } }
 					);
-					const tokenCreatedAt = response.data.timestamp;
-					setResendEmail(response.data.email);
-					const now = dayjs().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-					const difference = dayjs(now).diff(dayjs(tokenCreatedAt)) / 1000 / 60;
-					console.log(difference);
+					const { tokenValid, timeRemaining, email } = response.data;
 
-					if (difference < 30) {
+					setResendEmail(email);
+
+					if (tokenValid) {
 						setTokenValid(true);
-						setTimeRemaining(Math.floor(1800 - (difference * 60)));
+						setTimeRemaining(timeRemaining)
 					} else {
 						setTokenValid(false);
 					}
+
 				} catch (error) {
 					console.error('Error authenticating token: ', error);
 				}
@@ -118,28 +117,11 @@ const PasswordReset = () => {
 						token: token, // Sending token in the request body
 						password: formData.password.trim(),
 					});
-					console.log('Registration complete!');
+					console.log('Reset password complete!');
 					console.log(response.data);
+
+					// DON'T FORGET TO CHANGE THINGS BACK TO FALSE/NULL/ETC
 	
-				// 	// Reset the form and related states
-				// 	setFormData({
-				// 		firstname: '',
-				// 		lastname: '',
-				// 		email: '',
-				// 		password: '',
-				// 		confirm: '',
-				// 	});
-	
-				// 	// Reset other relevant states
-				// 	setPasswordMatch(null);
-				// 	setPasswordVisible(false);
-				// 	setFormComplete(false);
-				// 	setEmailValid(null);
-				// 	setPasswordValid(null);
-				// 	setFormSubmitted(false);
-	
-				// 	// Redirects to home
-				// 	navigate('/login');
 				} catch (error) {
 					console.error('Registration error: ', error.response?.data);
 					setErrorMessage(

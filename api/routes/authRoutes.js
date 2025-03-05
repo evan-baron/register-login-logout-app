@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require('jsonwebtoken');
+const dayjs = require('dayjs');
 const cookieParser = require('cookie-parser');
 const router = express.Router();
 const authService = require('../services/authService');
@@ -40,12 +41,26 @@ router.get('/authenticateRecoveryToken', async (req, res) => {
 
 	try {
 		const tokenData = await userService.getRecoveryTokenData(token);
+
+		const tokenCreatedAt = tokenData.created_at;
+		const expiresAt = dayjs(tokenCreatedAt).add(30, 'minute').$d;
+		console.log('token created at: ', tokenCreatedAt);
+		console.log('expires at: ', expiresAt);
+		console.log('right now: ', dayjs().$d);
+		const difference = Math.floor(dayjs(expiresAt).diff(dayjs(), 'second'));
+		console.log('difference: ', difference);
+
+		const isValid = difference < 1800;
+		const timeRemaining = isValid ? (difference) : 0;
+
 		return res.json({ 
 			email: tokenData.user_email,
-			timestamp: tokenData.created_at
+			tokenValid: isValid,
+			timeRemaining: timeRemaining
 		});
 	} catch (err) {
 		console.log('There was an error: ', err.message);
+		return res.status(500).json({ message: 'Server error' });
 	}
 });
 
