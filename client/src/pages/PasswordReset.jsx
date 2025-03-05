@@ -43,16 +43,16 @@ const PasswordReset = () => {
 						{ params: { token: token } }
 					);
 					const tokenCreatedAt = response.data.timestamp;
+					setResendEmail(response.data.email);
 					const now = dayjs().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 					const difference = dayjs(now).diff(dayjs(tokenCreatedAt)) / 1000 / 60;
 					console.log(difference);
 
-					if (difference < 10) {
+					if (difference < 30) {
 						setTokenValid(true);
-						setTimeRemaining(Math.floor(600 - (difference * 60)));
+						setTimeRemaining(Math.floor(1800 - (difference * 60)));
 					} else {
 						setTokenValid(false);
-						setResendEmail(response.data.email);
 					}
 				} catch (error) {
 					console.error('Error authenticating token: ', error);
@@ -296,7 +296,7 @@ const PasswordReset = () => {
 					) : (
 						!emailSent ? (
 							<>
-								<h2>Your token has expired.</h2>
+								<h2>Sorry, your recovery token has expired.</h2>
 								<button
 									type='button'
 									role='button'
