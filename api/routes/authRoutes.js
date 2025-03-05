@@ -112,7 +112,7 @@ router.post('/recover-password', async (req, res) => {
 });
 
 router.post('/reset-password', async (req, res) => {
-    const { token, password, timestamp } = req.body; // Get token from request body instead of params
+    const { token, password } = req.body; // Get token from request body instead of params
 
     if (!token) {
         return res.status(400).json({ message: "Reset token is required." });
@@ -120,7 +120,6 @@ router.post('/reset-password', async (req, res) => {
 
     console.log("Received token:", token);
     console.log("New password:", password);
-	console.log("link clicked at: ", timestamp);
 
 });
 

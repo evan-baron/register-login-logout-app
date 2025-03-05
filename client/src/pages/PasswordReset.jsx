@@ -66,7 +66,6 @@ const PasswordReset = () => {
 	useEffect(() => {
 		let timer;
 		if (tokenValid && timeRemaining > 0) {
-			console.log(timeRemaining);
 			timer = setInterval(() => {
 				setTimeRemaining((prev) => prev - 1);
 			}, 1000);
@@ -99,7 +98,6 @@ const PasswordReset = () => {
 			setPasswordValid(passwordRegex.test(value));
 		}
 		setFormSubmitted(false);
-		setRegistrationError(null);
 	};
 
 	const handleSubmit = async () => {
@@ -115,14 +113,13 @@ const PasswordReset = () => {
 				return;
 			} else {
 				setFormComplete(false);
-				// try {
-				// 	const response = await axiosInstance.post('/reset-password', {
-				// 		token, // Sending token in the request body
-				// 		password: formData.password.trim(),
-				// 		timestamp,
-				// 	});
-				// 	console.log('Registration complete!');
-				// 	console.log(response.data);
+				try {
+					const response = await axiosInstance.post('/reset-password', {
+						token: token, // Sending token in the request body
+						password: formData.password.trim(),
+					});
+					console.log('Registration complete!');
+					console.log(response.data);
 	
 				// 	// Reset the form and related states
 				// 	setFormData({
@@ -143,13 +140,13 @@ const PasswordReset = () => {
 	
 				// 	// Redirects to home
 				// 	navigate('/login');
-				// } catch (error) {
-				// 	console.error('Registration error: ', error.response?.data);
-				// 	setErrorMessage(
-				// 		error.response ? error.response.data.message : 'An error occurred'
-				// 	);
-				// 	setFormComplete(false);
-				// }
+				} catch (error) {
+					console.error('Registration error: ', error.response?.data);
+					setErrorMessage(
+						error.response ? error.response.data.message : 'An error occurred'
+					);
+					setFormComplete(false);
+				}
 			}	
 		} else {
 			console.log(token);
@@ -296,7 +293,7 @@ const PasswordReset = () => {
 					) : (
 						!emailSent ? (
 							<>
-								<h2>Sorry, your recovery token has expired.</h2>
+								<h2>Sorry, your recovery link has expired.</h2>
 								<button
 									type='button'
 									role='button'
