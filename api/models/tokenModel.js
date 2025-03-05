@@ -21,12 +21,12 @@ const Token = {
 	},
 
 	// Get token created timestamp
-	async getRecoveryTokenTimestamp(token) {
+	async getRecoveryTokenData(token) {
 		const [result] = await pool.execute(
-			'SELECT created_at FROM email_recovery_tokens WHERE token = ?',
+			'SELECT user_email, created_at FROM email_recovery_tokens WHERE token = ?',
 			[token]
 		);
-		return result;
+		return result[0];
 	}
 }
 

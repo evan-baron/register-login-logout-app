@@ -40,9 +40,12 @@ router.get('/authenticateRecoveryToken', async (req, res) => {
 	}
 
 	try {
-		const tokenTimestamp = await userService.getRecoveryTokenTimestamp(token);
-		console.log(`Timestamp for ${token}: `, tokenTimestamp);
-		return res.json({ timestamp: tokenTimestamp});
+		const tokenData = await userService.getRecoveryTokenData(token);
+		console.log(`Timestamp for ${token}: `, tokenData.created_at);
+		return res.json({ 
+			email: tokenData.user_email,
+			timestamp: tokenData.created_at
+		});
 	} catch (err) {
 		console.log('There was an error: ', err.message);
 	}

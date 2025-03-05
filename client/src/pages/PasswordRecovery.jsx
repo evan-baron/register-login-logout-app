@@ -28,6 +28,7 @@ const PasswordRecovery = () => {
 	const handleSubmit = async () => {
 		if (formComplete) {
 			try {
+				setFormComplete(false);
 				const data = await axiosInstance.post('/recover-password', {
 					email: formData.email,
 				});
