@@ -35,22 +35,14 @@ const PasswordReset = () => {
 				console.log('No token found. Redirecting to home.');
 				navigate('/');
 			} else {
-				console.log('Token exists: ', token);
 				try {
 					const response = await axiosInstance.get(
 						'/authenticateRecoveryToken',
 						{ params: { token: token } }
 					);
-					console.log(response.data);
 					const tokenCreatedAt = response.data.timestamp;
 					const now = dayjs().utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-
 					const difference = dayjs(now).diff(dayjs(tokenCreatedAt)) / 1000 / 60;
-
-					console.log(tokenCreatedAt);
-					console.log(now);
-
-					console.log(difference);
 
 					if (difference < 10) {
 						setTokenValid(true);

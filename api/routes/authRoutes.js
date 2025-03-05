@@ -33,7 +33,6 @@ router.get('/authenticate', async (req, res) => {
 
 router.get('/authenticateRecoveryToken', async (req, res) => {
 	const { token } = req.query;
-	console.log(token);
 	
 	if (!token) {
 		return res.status(400).json({ message: 'Recovery token is required.' });
@@ -41,7 +40,6 @@ router.get('/authenticateRecoveryToken', async (req, res) => {
 
 	try {
 		const tokenData = await userService.getRecoveryTokenData(token);
-		console.log(`Timestamp for ${token}: `, tokenData.created_at);
 		return res.json({ 
 			email: tokenData.user_email,
 			timestamp: tokenData.created_at
