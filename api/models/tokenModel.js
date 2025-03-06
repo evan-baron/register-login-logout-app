@@ -3,10 +3,10 @@ const pool = require('../config/db');
 
 const Token = {
 	// Create email recovery token
-	async createRecoveryToken(email, token) {
+	async createRecoveryToken(id, token) {
 		const [result] = await pool.execute(
-			'INSERT INTO email_recovery_tokens (user_email, token) VALUES (?, ?)',
-			[email, token]
+			'INSERT INTO email_recovery_tokens (user_id, token) VALUES (?, ?)',
+			[id, token]
 		);
 		return result;
 	},
@@ -23,7 +23,7 @@ const Token = {
 	// Get token created timestamp
 	async getRecoveryTokenData(token) {
 		const [result] = await pool.execute(
-			'SELECT user_email, created_at, token_used FROM email_recovery_tokens WHERE token = ?',
+			'SELECT user_id, created_at, token_used FROM email_recovery_tokens WHERE token = ?',
 			[token]
 		);
 		return result[0];

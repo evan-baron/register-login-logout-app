@@ -104,12 +104,15 @@ router.post('/recover-password', async (req, res) => {
 	
 	try {
 		const user = await userService.getUserByEmail(email);
-
+		console.log(user);
+		
 		if (!user) {
 			return res.status(400).json({ message: 'User not found' });
 		}
+		
+		const { id } = user;
 
-		const recoveryToken = await userService.generateRecoveryToken(email);
+		const recoveryToken = await userService.generateRecoveryToken(id);
 		
 		try {
 			await mailService.sendPasswordResetEmail(user, recoveryToken);

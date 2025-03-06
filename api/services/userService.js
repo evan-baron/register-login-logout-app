@@ -66,14 +66,14 @@ const getUserById = async (id) => {
 };
 
 // Generate recovery token
-const generateRecoveryToken = async (email, length = 32) => {
+const generateRecoveryToken = async (id, length = 32) => {
 	const recoveryToken = crypto
 		.randomBytes(length)
 		.toString('hex')
 		.slice(0, length);
 
 	try {
-		await tokenModel.createRecoveryToken(email, recoveryToken);
+		await tokenModel.createRecoveryToken(id, recoveryToken);
 		return recoveryToken;
 	} catch (err) {
 		console.log('There was an error: ', err.message);
